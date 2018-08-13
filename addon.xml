@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="kodi.gpio.pseudodpms" name="gpiodpms" version="0.0.1" provider-name="Lukas Rucka">
+    <requires>
+        <import addon="xbmc.python"/>
+        <import addon="xbmc.addon"/>
+    </requires>
+    <extension point="xbmc.python.script" library="screensaver.py" />
+    <extension point="xbmc.addon.metadata">
+        <provides>executable</provides>
+        <platform>linux</platform>
+        <language/>
+        <website></website>
+        <source>https://github.com/xrucka/kodi.gpio.pseudodpms</source>
+        <email></email>
+        <summary lang="en"></summary>
+        <description>DPMS emulation with GPIO monitor ON/OFF switching</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    </extension>
+</addon>
