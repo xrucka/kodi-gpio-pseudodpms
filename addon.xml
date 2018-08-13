@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="kodi.gpio.pseudodpms" name="gpiodpms" version="0.0.1" provider-name="Lukas Rucka">
+<addon id="script.service.gpio-pseudo-dpms" name="Display On/Off over GPIO" version="0.0.1" provider-name="Lukas Rucka">
     <requires>
-        <import addon="xbmc.python"/>
-        <import addon="xbmc.addon"/>
+        <import addon="xbmc.python" version="2.1.0" />
+        <import addon="xbmc.addon" version="12.0.0" />
     </requires>
-    <extension point="xbmc.python.script" library="screensaver.py" />
+    <!--<extension point="xbmc.python.script" library="pseudodpms.py" />-->
+    <extension point="xbmc.service" library="pseudodpms.py" />
     <extension point="xbmc.addon.metadata">
         <provides>executable</provides>
         <platform>linux</platform>
         <language/>
         <website></website>
-        <source>https://github.com/xrucka/kodi.gpio.pseudodpms</source>
+        <source>https://github.com/xrucka/kodi-gpio-pseudodpms</source>
         <email></email>
         <summary lang="en"></summary>
         <description>DPMS emulation with GPIO monitor ON/OFF switching</description>

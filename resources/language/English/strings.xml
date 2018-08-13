@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- settings labels -->
+    <string id="128">General configuration</string>
+    <string id="30001">Sense current display state before operating upon</string>
+    <string id="30002">Sense pin logical ID</string>
+    <string id="30011">Toggle pin logical ID</string>
+    <string id="30012">Toggle pulse duration (secs)</string>
+    <string id="30021">Turn display off after X screensaver activity minutes</string>
+</strings>
+

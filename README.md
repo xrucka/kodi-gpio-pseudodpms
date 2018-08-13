@@ -20,14 +20,14 @@ orange/green LED and 5 control buttons. The PCB is connected to monitor
 with 6-pin 2mm connector. However, only 5 lines of the connector are
 used - the 6th line is not handled.
 
-![Controller board circuit schematics](display_ctl.png)
+![Controller board circuit schematics](resources/display_ctl.png)
 
 In order to switch the buttons via GPIO, I've created a small parasite,
 which I attached inbetween the controller PCB and monitor cable.
 One GPIO pin is used to toggle the monitor ON/OFF state, the other
 is used to read the current ON/OFF state.
 
-![GPIO parasite for controlling the monitor](parazite.png)
+![GPIO parasite for controlling the monitor](resources/parazite.png)
 
 Finally, if you use Raspberry PI 3 (as I do), you need to pick unoccupied
 GPIO pins. In my setup, the toggle pin is logical 17 (physical 11)
