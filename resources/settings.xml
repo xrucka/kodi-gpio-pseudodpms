@@ -5,7 +5,8 @@
         <setting label="30002" type="number" id="sense_pin" enable="eq(-1,true)" default="27" option="int" />
         <setting type="sep"/>
         <setting label="30011" type="number" id="toggle_pin" default="17" option="int" />
-        <setting label="30012" type="number" id="toggle_duration" default="0.3" />
+        <setting label="30013" type="enum" id="toggle_mode" default="300131" lvalues="300131|300132" />
+        <setting label="30012" type="number" id="toggle_duration" enable="eq(-1,0)" default="0.3" />
         <setting type="sep"/>
         <setting label="30021" type="number" id="inactivity_timeout" default="10" />
     </category>

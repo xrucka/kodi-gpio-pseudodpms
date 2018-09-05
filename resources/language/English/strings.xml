@@ -6,6 +6,9 @@
     <string id="30002">Sense pin logical ID</string>
     <string id="30011">Toggle pin logical ID</string>
     <string id="30012">Toggle pulse duration (secs)</string>
+    <string id="30013">Toggle operation</string>
+    <string id="300131">Pulse (button)</string>
+    <string id="300132">Hold (switch)</string>
     <string id="30021">Turn display off after X screensaver activity minutes</string>
 </strings>
 
