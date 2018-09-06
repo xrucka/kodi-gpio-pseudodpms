@@ -183,7 +183,7 @@ class PseudoDPMSAddon():
         self.sense_handler.checkOrReexport()
         self.sense_handler.reconfigure("in")
         
-        if self.sense_pin == self.toggle_pin:
+        if self.sense_pin == self.toggle_pin or not self.use_sense:
             self.toggle_handler = self.sense_handler
         else:
             self.toggle_handler = GPIOPin(self.toggle_pin)

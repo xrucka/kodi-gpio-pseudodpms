@@ -40,8 +40,25 @@ accessed via /sys/class/gpio with individual exported GPIO pins.
 
 ## Configuration
 The addon offers following configuration options:
-* Toggle duration - how long to keep logical 1 on the switch pin.
 * Use sense for toggle control - whether to read current monitor state
 and toggle only if needed.
+* Export logical pins (if you'r kodi does not have permission to write
+to gpio sysfs subsystem, you'll need to export the pins manually).
 * Sense pin logical ID.
 * Toggle pin logical ID.
+
+Furthermore, the addon offers 2 modes of operation - simulating either
+button, or switch. For button mode operation (default, should cover
+usual usage), set:
+
+* Toggle duration - how long to keep logical 1 on the switch pin.
+* Toggle operation - Pulse (button)
+
+If your display requires holding logical 1 to keep it open (and possibly
+does not provide sense signal), you can use the Hold mode:
+
+* Toggle operation - Hold (switch) ; which will keep logical 1 on the
+control signal as long as the display should be kept on and sets the line
+to 0 for shutdown.
+* You might further want to piggiback the sense signal to the control
+one. You can achieve that when both pin logical ID's match.
