@@ -39,6 +39,9 @@ to use the PI-speciffic libraries. Thus, this addon uses GPIO subsystem
 accessed via /sys/class/gpio with individual exported GPIO pins.
 
 ## Configuration
+For most users, the default values of everything should be ok.
+You'll need to set up pin bindings (sense + toggle).
+
 The addon offers following configuration options:
 * Use sense for toggle control - whether to read current monitor state
 and toggle only if needed.

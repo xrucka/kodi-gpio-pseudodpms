@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
     <category label="128">
+        <setting label="30000" type="bool" id="export_pins" default="true" />
         <setting label="30001" type="bool" id="use_sense" default="true" />
         <setting label="30002" type="number" id="sense_pin" enable="eq(-1,true)" default="27" option="int" />
         <setting type="sep"/>

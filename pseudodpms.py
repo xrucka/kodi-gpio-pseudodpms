@@ -36,7 +36,10 @@ class GPIOPin:
         directionfd.close()
         return query == old_direction
 
-    def reconfigure(self, new_direction, override = False):
+    def reconfigure(self, new_direction = None, override = False):
+        if new_direction is None and self.wanted is not None:
+            return self.reconfigure(self.wanted, override)
+
         directionfd = open("%s/direction" % (self.pinpath()), 'r')
         old_direction = directionfd.read().strip()
         directionfd.close()
@@ -150,6 +153,7 @@ class PseudoDPMSAddon():
         self.use_sense = None
         self.toggle_duration = None
         self.toggle_mode_pulse = None
+        self.export_pins = None
         
         self.sense_handler = None
         self.toggle_handler = None
@@ -162,6 +166,7 @@ class PseudoDPMSAddon():
         
         self.inactivity_timeout = float(self.addon.getSetting("inactivity_timeout")) * 60
         self.use_sense = self.addon.getSetting('use_sense') == "true"
+        self.export_pins = self.addon.getSetting('export_pins') == "true"
         self.sense_pin = int(self.addon.getSetting("sense_pin"))
         self.toggle_pin = int(self.addon.getSetting("toggle_pin"))
         self.toggle_duration = float(self.addon.getSetting("toggle_duration"))
@@ -171,24 +176,24 @@ class PseudoDPMSAddon():
 
     def unconfigure(self, old_sense, old_toggle): 
         if old_sense != self.sense_pin and self.sense_handler is not None:
-            self.sense_handler.unexport()
+            if self.export_pins:
+                self.sense_handler.unexport()
 
         if old_toggle != self.toggle_pin and self.sense_handler is not None:
-            self.toggle_handler.unexport()
+            if self.export_pins:
+                self.toggle_handler.unexport()
 
     def reconfigure(self, old_sense, old_toggle):
         self.unconfigure(old_sense, old_toggle)
 
         self.sense_handler = GPIOPin(self.sense_pin)
-        self.sense_handler.checkOrReexport()
-        self.sense_handler.reconfigure("in")
+        self.claim_pin(self.sense_handler, "in")
         
         if self.sense_pin == self.toggle_pin or not self.use_sense:
             self.toggle_handler = self.sense_handler
         else:
             self.toggle_handler = GPIOPin(self.toggle_pin)
-        self.toggle_handler.checkOrReexport()
-        self.toggle_handler.reconfigure("out")
+        self.claim_pin(self.toggle_handler, "out")
         
     def onScreensaverActivated(self):
         if self.inactivity_timer:
@@ -208,23 +213,30 @@ class PseudoDPMSAddon():
         self.inactivity_timer = None
         
         if self.use_sense:
-            self.sense_handler.checkOrReexport()
+            self.claim_pin(self.sense_handler)
             if self.sense_off():
                 xbmc.log("Sense claims display allready shut down", level=xbmc.LOGERROR)
                 return
         
-        self.toggle_handler.checkOrReexport()
+        self.claim_pin(self.toggle_handler)
         self.toggle(False)
     
     def start_display(self):
         if self.use_sense:
-            self.sense_handler.checkOrReexport()
+            self.claim_pin(self.sense_handler)
+
             if self.sense_on():
                 xbmc.log("Sense claims display allready on", level=xbmc.LOGERROR)
                 return
         
-        self.toggle_handler.checkOrReexport()
+        self.claim_pin(self.toggle_handler)
         self.toggle(True)
+
+    def claim_pin(self, pin, direction = None):
+        if self.export_pins:        
+            pin.checkOrReexport()
+        else:
+            pin.reconfigure(direction)
     
     def sense_on(self):
         return self.sense(True)
