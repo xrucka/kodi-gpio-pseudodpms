@@ -38,6 +38,15 @@ As the Raspberry PI is not the only SBC running LibreELEC, I decided not
 to use the PI-speciffic libraries. Thus, this addon uses GPIO subsystem
 accessed via /sys/class/gpio with individual exported GPIO pins.
 
+## Instalation
+First, create corresponding addon zip file
+```
+ git clone https://github.com/xrucka/kodi-gpio-pseudodpms.git ./script.service.gpio-pseudo-dpms
+ zip -r script.service.gpio-pseudo-dpms.zip script.service.gpio-pseudo-dpms
+```
+
+Then install through kodi addon management (install from zip file).
+
 ## Configuration
 For most users, the default values of everything should be ok.
 You'll need to set up pin bindings (sense + toggle).
