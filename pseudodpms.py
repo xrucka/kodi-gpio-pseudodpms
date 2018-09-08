@@ -187,13 +187,15 @@ class PseudoDPMSAddon():
         self.unconfigure(old_sense, old_toggle)
 
         self.sense_handler = GPIOPin(self.sense_pin)
-        self.claim_pin(self.sense_handler, "in")
+        self.claim_pin(self.sense_handler)
+        self.sense_handler.reconfigure("in")
         
         if self.sense_pin == self.toggle_pin or not self.use_sense:
             self.toggle_handler = self.sense_handler
         else:
             self.toggle_handler = GPIOPin(self.toggle_pin)
-        self.claim_pin(self.toggle_handler, "out")
+        self.claim_pin(self.toggle_handler)
+        self.toggle_handler.reconfigure("out")
         
     def onScreensaverActivated(self):
         if self.inactivity_timer:
@@ -232,11 +234,11 @@ class PseudoDPMSAddon():
         self.claim_pin(self.toggle_handler)
         self.toggle(True)
 
-    def claim_pin(self, pin, direction = None):
+    def claim_pin(self, pin):
         if self.export_pins:        
             pin.checkOrReexport()
         else:
-            pin.reconfigure(direction)
+            pin.reconfigure()
     
     def sense_on(self):
         return self.sense(True)
