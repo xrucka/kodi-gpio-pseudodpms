@@ -75,6 +75,7 @@ class GPIOPin:
         try:
             exportfd = open("%s/export" % (SYSFSPATH), 'w')
             exportfd.write(str(self.pin))
+            xbmc.log("exported %d" % (self.pin), level=xbmc.LOGDEBUG)
         except IOError as err:
             return False
         finally:
@@ -87,6 +88,7 @@ class GPIOPin:
         try:
             exportfd = open("%s/unexport" % (SYSFSPATH), 'w')
             exportfd.write(str(self.pin))
+            xbmc.log("unexported %d" % (self.pin), level=xbmc.LOGDEBUG)
         except IOError as err:
             return False
         finally:
@@ -121,10 +123,10 @@ class GPIOPin:
         pinval = 1 if value else 0
         fd.write(str(pinval))
         fd.close()
+        xbmc.log("GPIO Pin write done %d: %s" % (self.pin, value), level=xbmc.LOGDEBUG)
+        self.readValue()
     
-
 class PseudoDPMSAddon():
-
     class ScreensaverMonitor(xbmc.Monitor):
         def __init__(self, parent):
             xbmc.Monitor.__init__(self)
@@ -154,6 +156,7 @@ class PseudoDPMSAddon():
         self.toggle_duration = None
         self.toggle_mode_pulse = None
         self.export_pins = None
+        self.last_state = True
         
         self.sense_handler = None
         self.toggle_handler = None
@@ -185,17 +188,18 @@ class PseudoDPMSAddon():
 
     def reconfigure(self, old_sense, old_toggle):
         self.unconfigure(old_sense, old_toggle)
-
-        self.sense_handler = GPIOPin(self.sense_pin)
-        self.claim_pin(self.sense_handler)
-        self.sense_handler.reconfigure("in")
+        
+        self.toggle_handler = GPIOPin(self.toggle_pin)
+        self.claim_pin(self.toggle_handler)
         
         if self.sense_pin == self.toggle_pin or not self.use_sense:
-            self.toggle_handler = self.sense_handler
-        else:
-            self.toggle_handler = GPIOPin(self.toggle_pin)
-        self.claim_pin(self.toggle_handler)
-        self.toggle_handler.reconfigure("out")
+		self.sense_handler = self.toggle_handler
+	else:
+		self.sense_handler = GPIOPin(self.sense_pin)
+		self.claim_pin(self.sense_handler)
+		self.sense_handler.reconfigure("in")
+
+	self.toggle_handler.reconfigure("out")
         
     def onScreensaverActivated(self):
         if self.inactivity_timer:
@@ -208,6 +212,10 @@ class PseudoDPMSAddon():
         if self.inactivity_timer:
             self.inactivity_timer.cancel()
             self.inactivity_timer = None
+
+	# prevent unneeded toggles when sense is not used
+	if not self.use_sense and self.last_state:
+		return
         
         self.start_display()
     
@@ -251,19 +259,23 @@ class PseudoDPMSAddon():
     
     def toggle_pulse(self, goal):
         duration = self.toggle_duration
+        xbmc.log("Toggle pulse duration: %r" % (self.toggle_duration), level=xbmc.LOGDEBUG)
         
         self.toggle_handler.writeValue(True)
         time.sleep(duration)
         self.toggle_handler.writeValue(False)
+        xbmc.log("Toggle pulse done", level=xbmc.LOGDEBUG)
 
     def toggle_hold(self, goal):
         self.toggle_handler.writeValue(goal)
 
     def toggle(self, goal):
+        xbmc.log("Toggle mode pulse?: %r value: %r" % (self.toggle_mode_pulse, goal), level=xbmc.LOGDEBUG)
         if self.toggle_mode_pulse:
             self.toggle_pulse(goal)
         else:
             self.toggle_hold(goal)
+        self.last_state = goal
 
 if __name__ == '__main__':
     pseudo = PseudoDPMSAddon()
