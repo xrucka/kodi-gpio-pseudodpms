@@ -8,7 +8,7 @@ own schematics, suitable for your hardware.
 ## Motivation and wiring
 
 This addon is motivated by use of Raspberry PI 3 + LibreElec (Kodi JeOS).
-The issue of such solution is, that Raspberry PI essentialy cannot
+The issue of such solution is, that Raspberry PI essentially cannot
 utilize the CEC/DPMS features over HDMI-to-DVI connected monitors,
 such as mine Lenovo L2440p. However, it's okay with monitor turning
 off and on again. 
@@ -23,7 +23,7 @@ used - the 6th line is not handled.
 ![Controller board circuit schematics](resources/display_ctl.png)
 
 In order to switch the buttons via GPIO, I've created a small parasite,
-which I attached inbetween the controller PCB and monitor cable.
+which I attached in between the controller PCB and monitor cable.
 One GPIO pin is used to toggle the monitor ON/OFF state, the other
 is used to read the current ON/OFF state.
 
@@ -35,10 +35,10 @@ and sense pin on logical 27 (physical 13).
 
 ## Logic outline
 As the Raspberry PI is not the only SBC running LibreELEC, I decided not
-to use the PI-speciffic libraries. Thus, this addon uses GPIO subsystem
+to use the PI-specific libraries. Thus, this addon uses GPIO subsystem
 accessed via /sys/class/gpio with individual exported GPIO pins.
 
-## Instalation
+## Installation
 First, create corresponding addon zip file
 ```
  git clone https://github.com/xrucka/kodi-gpio-pseudodpms.git ./script.service.gpio-pseudo-dpms
@@ -54,7 +54,7 @@ You'll need to set up pin bindings (sense + toggle).
 The addon offers following configuration options:
 * Use sense for toggle control - whether to read current monitor state
 and toggle only if needed.
-* Export logical pins (if you'r kodi does not have permission to write
+* Export logical pins (if your kodi does not have permission to write
 to gpio sysfs subsystem, you'll need to export the pins manually).
 * Sense pin logical ID.
 * Toggle pin logical ID.
@@ -72,5 +72,5 @@ does not provide sense signal), you can use the Hold mode:
 * Toggle operation - Hold (switch) ; which will keep logical 1 on the
 control signal as long as the display should be kept on and sets the line
 to 0 for shutdown.
-* You might further want to piggiback the sense signal to the control
+* You might further want to piggyback the sense signal to the control
 one. You can achieve that when both pin logical ID's match.
