@@ -1,0 +1,19 @@
+name: Pylint
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 2.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 2.7
+    - name: Install dependencies
+      run: |
+        python2.7 -m pip install --upgrade pip
+        pip install pylint
+    - name: Analysing the code with pylint
+      run: |
+        pylint --rcfile=.pylintrc `ls -R|grep .py$|xargs`
+
